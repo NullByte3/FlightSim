@@ -10,7 +10,14 @@ db = mysql.connector.connect(
         database=os.getenv("DB_NAME")
     )
 
-def get_airports_by_continent(db, continent):
+# I don't know if this should be fixed, but the problem with this is that the player would never spawn on an airport in Antarctica, - NullByte3.
+# This is very easy to fix, but fuck it.
+def get_random_airport():
+    cursor = db.cursor()
+    cursor.execute("SELECT name, continent, latitude_deg, longitude_deg FROM airport WHERE type = 'large_airport' ORDER BY RAND() LIMIT 1")
+    return cursor.fetchone()
+
+def get_airports_by_continent(continent):
     cursor = db.cursor()
     if continent == 'AN':
         cursor.execute("SELECT name, latitude_deg, longitude_deg FROM airport WHERE continent = 'AN' ORDER BY RAND() LIMIT 5")
