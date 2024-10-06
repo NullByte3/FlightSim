@@ -29,10 +29,14 @@ def play_game():
     time.sleep(1.0)
     print(Fore.YELLOW + "Good luck with your adventure and " + Fore.GREEN + "have fun!")
     while len(visited_continents) < 7:
-        # TODO: Implement the game logic.
-        # Apparently, this is a team project, so I have to leave some work for my teammates.
-        # - NullByte3
+        print(Fore.BLUE + "\nCurrent Budget: ${}".format(budget))
+        print(Fore.CYAN + f"Continents Visited: {', '.join([continent_names[c] for c in visited_continents])}")
 
+        print(Fore.GREEN + "Where would you like to travel next?")
+        for i, continent in enumerate(continents):
+            if continent not in visited_continents:
+                print(Fore.YELLOW + f"{i + 1}. {continent_names[continent]}")
+        break
         pass
 
 play_game()
