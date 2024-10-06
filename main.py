@@ -13,7 +13,7 @@ def play_game():
         'SA': 'South America'
     }
     visited_continents = set()
-    budget = 12_500
+    budget = 18_500
     spawn_airport = database.get_random_airport()
     visited_continents.add(spawn_airport[1])
     print(Fore.CYAN + "Welcome to the 7 Continents Adventure!")
@@ -28,6 +28,10 @@ def play_game():
     print(Fore.YELLOW + "The game has begun!")
     time.sleep(1.0)
     print(Fore.YELLOW + "Good luck with your adventure and " + Fore.GREEN + "have fun!")
+    # Example usage of harversine formula - NullByte3
+    print(database.haversine(spawn_airport[3], spawn_airport[2], 0, 0))
+    # The game loop - NullByte3
+    # This will run as long as the player has not visited all continents.
     while len(visited_continents) < 7:
         print(Fore.BLUE + "\nCurrent Budget: ${}".format(budget))
         print(Fore.CYAN + f"Continents Visited: {', '.join([continent_names[c] for c in visited_continents])}")
@@ -38,5 +42,16 @@ def play_game():
                 print(Fore.YELLOW + f"{i + 1}. {continent_names[continent]}")
         break
         pass
+    print()
+    print(Fore.CYAN + "Congratulations! You've visited all 7 continents!")
+    print(Fore.CYAN + "You've completed the 7 Continents Adventure!")
+    play_again = input(Fore.GREEN + "Would you like to play again? (y/n) [Yes]: ")
+    if play_again.lower() in ['y', 'yes', '']:
+        for _ in range(5):
+            print()
+        play_game()
+    else:
+        print(Fore.YELLOW + "Thank you for playing! Goodbye!")
+        exit()
 
 play_game()

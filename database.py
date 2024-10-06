@@ -17,13 +17,19 @@ def get_random_airport():
     cursor.execute("SELECT name, continent, latitude_deg, longitude_deg FROM airport WHERE type = 'large_airport' ORDER BY RAND() LIMIT 1")
     return cursor.fetchone()
 
+# I included continent, so it's less confusing as we have get_random_airport() and that.
+# - NullByte3
 def get_airports_by_continent(continent):
     cursor = db.cursor()
     if continent == 'AN':
-        cursor.execute("SELECT name, latitude_deg, longitude_deg FROM airport WHERE continent = 'AN' ORDER BY RAND() LIMIT 5")
+        cursor.execute("SELECT name, continent, latitude_deg, longitude_deg FROM airport WHERE continent = 'AN' ORDER BY RAND() LIMIT 8")
     else:
-        cursor.execute("SELECT name, latitude_deg, longitude_deg FROM airport WHERE continent = %s AND type = 'large_airport' ORDER BY RAND() LIMIT 5", (continent,))
+        cursor.execute("SELECT name, continent, latitude_deg, longitude_deg FROM airport WHERE continent = %s AND type = 'large_airport' ORDER BY RAND() LIMIT 8", (continent,))
     return cursor.fetchall()
+
+def get_cost(airport_one, airport_two):
+    pass
+
 
 # haversine formula to calculate distance between two GPS points
 # Read more at: https://en.wikipedia.org/wiki/Haversine_formula
