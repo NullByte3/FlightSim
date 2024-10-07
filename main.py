@@ -103,11 +103,4 @@ def bye():
         print(Fore.YELLOW + "Thank you for playing! Goodbye!")
         exit()
 
-def ask_for_input(prompt, valid_inputs):
-    while True:
-        user_input = input(prompt)
-        if user_input in valid_inputs:
-            return user_input
-        print(Fore.MAGENTA + "Invalid input please try again!")
-
 play_game()
