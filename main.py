@@ -4,13 +4,14 @@ load_dotenv()
 import database
 from colorama import init, Fore, Back, Style
 init(autoreset=True)
+import random
 
 username = input(Fore.GREEN + "Enter your username: ")
 if database.has_played_before(username):
     print(Fore.YELLOW + "Welcome back!")
 else:
     print(Fore.CYAN + "Welcome to the 7 Continents Adventure!")
-    print(Fore.CYAN + "You will travel to all 7 continents on a budget of $8,500.")
+    print(Fore.CYAN + "You will travel to all 7 continents on a random budget between 6000$ and 8000$.")
     print(Fore.CYAN + "You will start at a random airport and choose where to go next.")
     print(Fore.CYAN + "The game ends when you have visited all 7 continents.")
     print(Fore.CYAN + "Good luck and have fun!")
@@ -25,7 +26,7 @@ def play_game():
         'SA': 'South America'
     }
     visited_continents = set()
-    budget = 2000
+    budget = random.randint(6000,8000)
     spawn_airport = database.get_random_airport()
     current_airport = spawn_airport
     visited_continents.add(spawn_airport[1])
@@ -41,7 +42,7 @@ def play_game():
     time.sleep(1.0)
     print(Fore.YELLOW + "Good luck with your adventure and " + Fore.GREEN + "have fun!")
     # Example usage of harversine formula - NullByte3
-    print(database.haversine(spawn_airport[3], spawn_airport[2], 0, 0))
+    #print(database.haversine(spawn_airport[3], spawn_airport[2], 0, 0))
     # The game loop - NullByte3
     # This will run as long as the player has not visited all continents.
     while len(visited_continents) < 7:
@@ -101,4 +102,12 @@ def bye():
     else:
         print(Fore.YELLOW + "Thank you for playing! Goodbye!")
         exit()
+
+def ask_for_input(prompt, valid_inputs):
+    while True:
+        user_input = input(prompt)
+        if user_input in valid_inputs:
+            return user_input
+        print(Fore.MAGENTA + "Invalid input please try again!")
+
 play_game()
