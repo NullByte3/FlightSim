@@ -5,6 +5,18 @@ import database
 from colorama import init, Fore, Back, Style
 init(autoreset=True)
 
+username = input(Fore.GREEN + "Enter your username: ")
+if database.has_played_before(username):
+    print(Fore.YELLOW + "Welcome back!")
+else:
+    print(Fore.CYAN + "Welcome to the 7 Continents Adventure!")
+    print(Fore.CYAN + "You will travel to all 7 continents on a budget of $8,500.")
+    print(Fore.CYAN + "You will start at a random airport and choose where to go next.")
+    print(Fore.CYAN + "The game ends when you have visited all 7 continents.")
+    print(Fore.CYAN + "Good luck and have fun!")
+    time.sleep(5)
+    for _ in range(5):
+        print()
 def play_game():
     continents = ['AF', 'AN', 'AS', 'EU', 'NA', 'OC', 'SA']
     continent_names = {
@@ -13,10 +25,10 @@ def play_game():
         'SA': 'South America'
     }
     visited_continents = set()
-    budget = 18_500
+    budget = 8_500
     spawn_airport = database.get_random_airport()
+    current_airport = spawn_airport
     visited_continents.add(spawn_airport[1])
-    print(Fore.CYAN + "Welcome to the 7 Continents Adventure!")
     print(Fore.RED + "You've spawned in...")
     # Python sucks, time package sleeps and not threading? Idfk what syntax is that. - NullByte3
     # Also, why in the hell the time is in seconds, not milliseconds :skull:
@@ -37,16 +49,37 @@ def play_game():
         print(Fore.CYAN + f"Continents Visited: {', '.join([continent_names[c] for c in visited_continents])}")
 
         print(Fore.GREEN + "Where would you like to travel next?")
-        continent_ids = []
         for i, continent in enumerate(continents):
             if continent not in visited_continents:
-                print(Fore.YELLOW + f"{i + 1}. {continent_names[continent]}")
-                continent_ids.append(str(i+1))
-        ask_for_input("Wich of these?", continent_ids)
-        pass
+                print(Fore.YELLOW + f"{i + 1}. {continent_names[continent]} [{continent}]")
+        where_to = ask_for_input(Fore.GREEN + "Enter the number of the continent you'd like to travel to: ", [str(i + 1) for i in range(7)])
+        continent = continents[int(where_to) - 1]
+
+        airports = database.get_airports_by_continent(continent)
+        print(Fore.GREEN + "Choose an airport to travel to:")
+        can_travel_to_any = False
+        for i, airport in enumerate(airports):
+            print(Fore.YELLOW + f"{i + 1}. {airport[0]} ${database.get_cost(current_airport, airport)}")
+            if database.get_cost(current_airport, airport) <= budget:
+                can_travel_to_any = True
+        if not can_travel_to_any:
+            print(Fore.RED + "You don't have enough money to travel to any of these airports.")
+            print(Fore.RED + "Game Over! You've run out of money.")
+            break
+        where_to = ask_for_input(Fore.GREEN + "Enter the number of the airport you'd like to travel to: ", [str(i + 1) for i in range(8)])
+        airport = airports[int(where_to) - 1]
+        print(Fore.CYAN + f"Travelling to {airport[0]}...")
+        current_airport = airport
+        visited_continents.add(continent)
+
+        continue
+
     print()
     print(Fore.CYAN + "Congratulations! You've visited all 7 continents!")
     print(Fore.CYAN + "You've completed the 7 Continents Adventure!")
+    print(Fore.CYAN + "You have ${} left in your budget.".format(budget))
+    database.add_score(username, 1)
+    print(Fore.CYAN + "Your score has been saved: Your score is now: {}".format(database.get_score(username)))
     play_again = input(Fore.GREEN + "Would you like to play again? (y/n) [Yes]: ")
     if play_again.lower() in ['y', 'yes', '']:
         for _ in range(5):

@@ -28,8 +28,7 @@ def get_airports_by_continent(continent):
     return cursor.fetchall()
 
 def get_cost(airport_one, airport_two):
-    pass
-
+    return haversine(airport_one[3], airport_one[2], airport_two[3], airport_two[2]) * 0.04
 
 # haversine formula to calculate distance between two GPS points
 # Read more at: https://en.wikipedia.org/wiki/Haversine_formula
@@ -42,6 +41,28 @@ def haversine(lon1, lat1, lon2, lat2):
     c = 2 * asin(sqrt(a))
     r = 6371
     return c * r
+
+
+def get_score(username):
+    cursor = db.cursor()
+    cursor.execute("SELECT score FROM users WHERE username = %s", (username,))
+    return cursor.fetchone()[0]
+
+def add_score(username, score):
+    cursor = db.cursor()
+    cursor.execute("UPDATE users SET score = score + %s WHERE username = %s", (score, username))
+    db.commit()
+
+def has_played_before(username):
+    cursor = db.cursor()
+    cursor.execute("SELECT COUNT(*) FROM users WHERE username = %s", (username,))
+    if cursor.fetchone()[0] > 0:
+        return True
+    else:
+        cursor.execute("INSERT INTO users (username, score) VALUES (%s, 0)", (username,))
+        db.commit()
+        return False
+
 
 def get_db():
     return db
