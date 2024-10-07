@@ -28,7 +28,7 @@ def get_airports_by_continent(continent):
     return cursor.fetchall()
 
 def get_cost(airport_one, airport_two):
-    return haversine(airport_one[3], airport_one[2], airport_two[3], airport_two[2]) * 0.04
+    return haversine(airport_one[3], airport_one[2], airport_two[3], airport_two[2]) * 0.12
 
 # haversine formula to calculate distance between two GPS points
 # Read more at: https://en.wikipedia.org/wiki/Haversine_formula
