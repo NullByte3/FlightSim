@@ -25,7 +25,7 @@ def play_game():
         'SA': 'South America'
     }
     visited_continents = set()
-    budget = 8_500
+    budget = 7_700
     spawn_airport = database.get_random_airport()
     current_airport = spawn_airport
     visited_continents.add(spawn_airport[1])
