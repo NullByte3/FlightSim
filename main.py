@@ -25,7 +25,7 @@ def play_game():
         'SA': 'South America'
     }
     visited_continents = set()
-    budget = 7_800
+    budget = 2000
     spawn_airport = database.get_random_airport()
     current_airport = spawn_airport
     visited_continents.add(spawn_airport[1])
@@ -65,6 +65,8 @@ def play_game():
         if len(possible_airports) == 0:
             print(Fore.RED + "You don't have enough money to travel to any of these airports.")
             print(Fore.RED + "Game Over! You've run out of money.")
+            bye()
+
             break
         where_to = ask_for_input(Fore.GREEN + "Enter the number of the airport you'd like to travel to: ", [str(i + 1) for i in range(len(possible_airports))])
         budget -= database.get_cost(current_airport, possible_airports[int(where_to) - 1])
@@ -81,14 +83,7 @@ def play_game():
     print(Fore.CYAN + "You have ${} left in your budget.".format(budget))
     database.add_score(username, 1)
     print(Fore.CYAN + "Your score has been saved: Your score is now: {}".format(database.get_score(username)))
-    play_again = input(Fore.GREEN + "Would you like to play again? (y/n) [Yes]: ")
-    if play_again.lower() in ['y', 'yes', '']:
-        for _ in range(5):
-            print()
-        play_game()
-    else:
-        print(Fore.YELLOW + "Thank you for playing! Goodbye!")
-        exit()
+    bye()
 
 def ask_for_input(prompt, valid_inputs):
     while True:
@@ -97,4 +92,13 @@ def ask_for_input(prompt, valid_inputs):
             return user_input
         print(Fore.MAGENTA + "Invalid input please try again!")
 
+def bye():
+    play_again = input(Fore.GREEN + "Would you like to play again? (y/n) [Yes]: ")
+    if play_again.lower() in ['y', 'yes', '']:
+        for _ in range(5):
+            print()
+        play_game()
+    else:
+        print(Fore.YELLOW + "Thank you for playing! Goodbye!")
+        exit()
 play_game()
