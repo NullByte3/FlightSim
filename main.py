@@ -5,6 +5,7 @@ import database
 from colorama import init, Fore, Back, Style
 init(autoreset=True)
 import random
+import math
 
 username = input(Fore.GREEN + "Enter your username: ")
 if database.has_played_before(username):
@@ -60,7 +61,7 @@ def play_game():
         print(Fore.GREEN + "Choose an airport to travel to:")
         possible_airports = []
         for i, airport in enumerate(airports):
-            print(Fore.YELLOW + f"{i + 1}. {airport[0]} ${database.get_cost(current_airport, airport)}")
+            print(Fore.YELLOW + f"{i + 1}. {airport[0]} ${math.trunc(database.get_cost(current_airport, airport))}")
             if database.get_cost(current_airport, airport) <= budget:
                 possible_airports.append(airport)
         if len(possible_airports) == 0:
