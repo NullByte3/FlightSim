@@ -57,16 +57,17 @@ def play_game():
 
         airports = database.get_airports_by_continent(continent)
         print(Fore.GREEN + "Choose an airport to travel to:")
-        can_travel_to_any = False
+        possible_airports = []
         for i, airport in enumerate(airports):
             print(Fore.YELLOW + f"{i + 1}. {airport[0]} ${database.get_cost(current_airport, airport)}")
             if database.get_cost(current_airport, airport) <= budget:
-                can_travel_to_any = True
-        if not can_travel_to_any:
+                possible_airports.append(airport)
+        if len(possible_airports) == 0:
             print(Fore.RED + "You don't have enough money to travel to any of these airports.")
             print(Fore.RED + "Game Over! You've run out of money.")
             break
-        where_to = ask_for_input(Fore.GREEN + "Enter the number of the airport you'd like to travel to: ", [str(i + 1) for i in range(8)])
+        where_to = ask_for_input(Fore.GREEN + "Enter the number of the airport you'd like to travel to: ", [str(i + 1) for i in range(len(possible_airports))])
+        budget -= database.get_cost(current_airport, possible_airports[int(where_to) - 1])
         airport = airports[int(where_to) - 1]
         print(Fore.CYAN + f"Travelling to {airport[0]}...")
         current_airport = airport
