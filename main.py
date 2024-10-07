@@ -37,10 +37,12 @@ def play_game():
         print(Fore.CYAN + f"Continents Visited: {', '.join([continent_names[c] for c in visited_continents])}")
 
         print(Fore.GREEN + "Where would you like to travel next?")
+        continent_ids = []
         for i, continent in enumerate(continents):
             if continent not in visited_continents:
                 print(Fore.YELLOW + f"{i + 1}. {continent_names[continent]}")
-        break
+                continent_ids.append(str(i+1))
+        ask_for_input("Wich of these?", continent_ids)
         pass
     print()
     print(Fore.CYAN + "Congratulations! You've visited all 7 continents!")
@@ -53,5 +55,12 @@ def play_game():
     else:
         print(Fore.YELLOW + "Thank you for playing! Goodbye!")
         exit()
+
+def ask_for_input(prompt, valid_inputs):
+    while True:
+        user_input = input(prompt)
+        if user_input in valid_inputs:
+            return user_input
+        print(Fore.MAGENTA + "Invalid input please try again!")
 
 play_game()
